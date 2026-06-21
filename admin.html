@@ -4,6 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard | Shankar Travel Agency</title>
+
+  <!-- Global Error Logger for Debugging -->
+  <script>
+    window.onerror = function(message, source, lineno, colno, error) {
+      // Try to format path for display
+      const file = source ? source.substring(source.lastIndexOf('/') + 1) : 'unknown';
+      const statusEl = document.getElementById('loading-status');
+      if (statusEl) {
+        statusEl.innerHTML = '<span style="color: var(--danger); font-weight: bold; font-size: 1rem;"><i class="fas fa-exclamation-triangle"></i> JS Error:</span><br>' + 
+          message + '<br><small style="color: var(--text-muted); font-family: monospace;">at ' + file + ':' + lineno + ':' + colno + '</small>';
+        const spinner = document.getElementById('loading-spinner');
+        if (spinner) spinner.style.display = 'none';
+      }
+      return false;
+    };
+  </script>
   
   <!-- FontAwesome for Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
