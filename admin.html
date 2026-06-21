@@ -183,6 +183,63 @@
       grid-template-columns: 260px 1fr;
     }
 
+    @media (max-width: 768px) {
+      .dashboard-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .sidebar {
+        padding: 12px 16px;
+        flex-direction: column;
+        gap: 12px;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .sidebar-brand {
+        margin-bottom: 10px;
+        text-align: center;
+        width: 100%;
+      }
+      .sidebar-menu {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-around;
+        gap: 5px;
+      }
+      .menu-item {
+        margin-bottom: 0;
+        padding: 8px 10px;
+        font-size: 0.8rem;
+        flex: 1;
+        justify-content: center;
+        text-align: center;
+        white-space: nowrap;
+      }
+      .sidebar-footer {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        padding-top: 10px;
+        margin-top: 5px;
+        width: 100%;
+      }
+      .user-info {
+        font-size: 0.75rem;
+      }
+      .btn-logout {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+      }
+      .content-area {
+        overflow-y: auto;
+      }
+    }
+
     /* Sidebar Styles */
     .sidebar {
       background-color: var(--primary);
@@ -1071,9 +1128,11 @@
         supabase.auth.signInWithPassword({
           email: 'admin@shankartravels.com',
           password: 'AdminPassword2026'
-        }).then(({ error }) => {
+        }).then(({ data, error }) => {
           if (error) {
             showToast('Auto-login failed: ' + error.message, 'error');
+          } else if (data && data.user) {
+            showDashboard(data.user);
           }
         });
       }
@@ -1330,9 +1389,12 @@
         const password = document.getElementById('login-password').value;
 
         try {
-          const { error } = await supabase.auth.signInWithPassword({ email, password });
+          const { data, error } = await supabase.auth.signInWithPassword({ email, password });
           if (error) throw error;
           showToast('Login successful!', 'success');
+          if (data && data.user) {
+            showDashboard(data.user);
+          }
         } catch (err) {
           alert('Login failed: ' + err.message);
           showToast(err.message, 'error');
