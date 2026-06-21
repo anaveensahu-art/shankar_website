@@ -7,19 +7,56 @@ const SUPABASE_URL = 'https://ojwadbuxafaecumoqqpo.supabase.co'; // e.g. 'https:
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9qd2FkYnV4YWZhZWN1bW9xcXBvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNTgzODgsImV4cCI6MjA5NzYzNDM4OH0.-zLp5bHzo3iVD8cXIAmcvjQBR8V2n84Ea__xbTwnPFk'; // e.g. 'eyJhbGciOiJIUzI1Ni...'
 
 let supabaseClient = null;
+let globalWhatsAppNumber = '919999999999';
 
 if (typeof window.supabase !== 'undefined' && SUPABASE_URL && SUPABASE_ANON_KEY) {
   supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 }
 
-
 document.addEventListener('DOMContentLoaded', () => {
-  initNavigation();
-  initTestimonialCarousel();
-  initBookingTabs();
-  initContactForms();
-  initWhatsAppWidget();
+  loadDynamicContent().then(() => {
+    initNavigation();
+    initTestimonialCarousel();
+    initBookingTabs();
+    initContactForms();
+    initWhatsAppWidget();
+  });
 });
+
+async function loadDynamicContent() {
+  if (!supabaseClient) return;
+  try {
+    const { data, error } = await supabaseClient.from('site_settings').select('*');
+    if (error) {
+      console.warn('Failed to load settings from database:', error.message);
+      return;
+    }
+
+    const settings = {};
+    data.forEach(item => {
+      settings[item.key] = item.value;
+    });
+
+    if (settings.whatsapp_number) {
+      globalWhatsAppNumber = settings.whatsapp_number.replace(/\D/g, '');
+    }
+
+    // Update Hero elements dynamically if we are on landing page
+    const heroTitle = document.querySelector('.hero-travel-agency .hero-title');
+    const heroDesc = document.querySelector('.hero-travel-agency .hero-desc');
+    const heroBadge = document.querySelector('.hero-travel-agency .hero-badge');
+    const heroSection = document.querySelector('.hero-travel-agency');
+
+    if (heroTitle && settings.hero_title) heroTitle.innerText = settings.hero_title;
+    if (heroDesc && settings.hero_desc) heroDesc.innerText = settings.hero_desc;
+    if (heroBadge && settings.hero_badge) heroBadge.innerText = settings.hero_badge;
+    if (heroSection && settings.hero_image_url) {
+      heroSection.style.backgroundImage = `linear-gradient(rgba(11, 25, 44, 0.65), rgba(11, 25, 44, 0.85)), url('${settings.hero_image_url}')`;
+    }
+  } catch (err) {
+    console.error('Error loading dynamic content:', err);
+  }
+}
 
 /**
  * 1. Navigation & Sticky Header Behavior
@@ -287,7 +324,7 @@ function initWhatsAppWidget() {
   if (!widget) return;
 
   widget.addEventListener('click', () => {
-    const phoneNumber = '919999999999'; 
+    const phoneNumber = globalWhatsAppNumber; 
     const message = encodeURIComponent("Hello Shankar Travel Agency! I'd like to plan a custom vacation package.");
     const url = `https://wa.me/${phoneNumber}?text=${message}`;
     window.open(url, '_blank');

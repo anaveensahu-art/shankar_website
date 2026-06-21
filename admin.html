@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Shankar Travel Agency</title>
+  
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Supabase JS Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --primary: #0B192C;
+      --secondary: #1E3E62;
+      --accent: #FF5722;
+      --light: #F4F6F9;
+      --dark: #0F172A;
+      --text: #334155;
+      --text-muted: #64748B;
+      --border: #E2E8F0;
+      --card-bg: #FFFFFF;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --info: #3B82F6;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--light);
+      color: var(--text);
+      line-height: 1.5;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Glassmorphic Login Screen */
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #0B192C 0%, #1E3E62 100%);
+      padding: 20px;
+      position: relative;
+    }
+
+    .login-container::before {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(255, 87, 34, 0.15) 0%, rgba(0,0,0,0) 70%);
+      top: 10%;
+      left: 15%;
+    }
+
+    .login-container::after {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, rgba(0,0,0,0) 70%);
+      bottom: 10%;
+      right: 15%;
+    }
+
+    .login-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: var(--shadow-lg);
+      z-index: 10;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .login-logo {
+      font-weight: 800;
+      font-size: 1.5rem;
+      color: var(--primary);
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .login-logo span {
+      color: var(--accent);
+    }
+
+    .login-subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      transition: all 0.3s;
+      background-color: var(--card-bg);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255, 87, 34, 0.15);
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 10px;
+    }
+
+    .btn-login:hover {
+      background-color: var(--secondary);
+    }
+
+    .login-info-box {
+      margin-top: 25px;
+      padding: 15px;
+      background-color: rgba(59, 130, 246, 0.08);
+      border-left: 4px solid var(--info);
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      color: var(--secondary);
+      line-height: 1.4;
+    }
+
+    /* Main Dashboard Layout */
+    .dashboard-container {
+      display: none;
+      height: 100vh;
+      grid-template-columns: 260px 1fr;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+      background-color: var(--primary);
+      color: white;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .sidebar-brand {
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: 1px;
+      margin-bottom: 40px;
+    }
+
+    .sidebar-brand span {
+      color: var(--accent);
+    }
+
+    .sidebar-menu {
+      list-style: none;
+      flex-grow: 1;
+    }
+
+    .menu-item {
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(255,255,255,0.75);
+      transition: all 0.3s;
+      margin-bottom: 8px;
+    }
+
+    .menu-item:hover, .menu-item.active {
+      color: white;
+      background-color: rgba(255,255,255,0.08);
+    }
+
+    .menu-item.active {
+      background-color: var(--accent);
+      color: white;
+      box-shadow: 0 4px 10px rgba(255, 87, 34, 0.25);
+    }
+
+    .sidebar-footer {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 20px;
+    }
+
+    .user-info {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.6);
+      margin-bottom: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .btn-logout {
+      width: 100%;
+      padding: 10px;
+      background-color: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: white;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-logout:hover {
+      background-color: var(--danger);
+      border-color: var(--danger);
+    }
+
+    /* Content Area Styles */
+    .content-area {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .header-bar {
+      background-color: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .page-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .main-body {
+      padding: 40px;
+      flex-grow: 1;
+      overflow-y: auto;
+    }
+
+    /* Tab Panes */
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    /* Card Panels */
+    .card-panel {
+      background-color: var(--card-bg);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+    }
+
+    .panel-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background-color: var(--card-bg);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
+      padding: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.3s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-top: 4px;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-icon {
+      font-size: 2.25rem;
+      color: rgba(30, 62, 98, 0.12);
+    }
+
+    .stat-card.leads-card .stat-icon { color: rgba(59, 130, 246, 0.15); }
+    .stat-card.pending-card .stat-icon { color: rgba(245, 158, 11, 0.15); }
+    .stat-card.contacted-card .stat-icon { color: rgba(16, 185, 129, 0.15); }
+
+    /* Leads Table */
+    .table-container {
+      overflow-x: auto;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      margin-top: 15px;
+    }
+
+    .leads-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .leads-table th {
+      background-color: var(--light);
+      color: var(--primary);
+      font-weight: 600;
+      padding: 14px 18px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .leads-table td {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .leads-table tr:hover {
+      background-color: rgba(244, 246, 249, 0.5);
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-align: center;
+      text-transform: capitalize;
+    }
+
+    .badge-pending {
+      background-color: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+    }
+
+    .badge-contacted {
+      background-color: rgba(59, 130, 246, 0.1);
+      color: var(--info);
+    }
+
+    .badge-completed {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+
+    .badge-closed {
+      background-color: rgba(100, 116, 139, 0.1);
+      color: var(--text-muted);
+    }
+
+    /* Analytics Charts / Progress Indicators */
+    .destinations-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    @media (max-width: 900px) {
+      .destinations-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .progress-bar-container {
+      margin-bottom: 20px;
+    }
+
+    .progress-bar-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .progress-track {
+      height: 8px;
+      background-color: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background-color: var(--accent);
+      border-radius: 4px;
+      width: 0;
+      transition: width 1s ease-out;
+    }
+
+    /* Modal Form / Details Panel */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background-color: var(--card-bg);
+      border-radius: var(--radius-lg);
+      max-width: 650px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+      animation: scaleUp 0.3s ease;
+      overflow: hidden;
+    }
+
+    .modal-header {
+      background-color: var(--primary);
+      color: white;
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-body {
+      padding: 30px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .modal-footer {
+      padding: 20px 30px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.7);
+      font-size: 1.25rem;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .close-btn:hover {
+      color: white;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .lead-detail-item {
+      margin-bottom: 16px;
+    }
+
+    .lead-detail-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    .lead-detail-value {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--primary);
+    }
+
+    /* CMS Form styles */
+    .cms-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 30px;
+    }
+
+    @media(max-width: 800px) {
+      .cms-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .preview-box {
+      border: 1px solid var(--border);
+      background-color: var(--light);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 250px;
+    }
+
+    .preview-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 15px;
+      letter-spacing: 0.5px;
+      align-self: flex-start;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+    }
+
+    .btn-primary {
+      background-color: var(--accent);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #e04c1b;
+      box-shadow: 0 4px 10px rgba(255, 87, 34, 0.2);
+    }
+
+    .btn-secondary {
+      background-color: var(--light);
+      color: var(--primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--border);
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: var(--primary);
+      color: white;
+      padding: 16px 24px;
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-lg);
+      display: none;
+      z-index: 1000;
+      align-items: center;
+      gap: 12px;
+      animation: slideInRight 0.3s ease;
+    }
+
+    .toast-success {
+      border-left: 4px solid var(--success);
+    }
+
+    .toast-error {
+      border-left: 4px solid var(--danger);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes scaleUp {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. LOGIN SCREEN -->
+  <div class="login-container" id="login-screen">
+    <div class="login-card">
+      <div class="login-header">
+        <h1 class="login-logo">SHANKAR <span>TRAVELS</span></h1>
+        <p class="login-subtitle">Admin Management Console Login</p>
+      </div>
+      
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label">Admin Email Address</label>
+          <input type="email" id="login-email" class="form-control" placeholder="e.g. admin@shankartravels.com" required autocomplete="username">
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input type="password" id="login-password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+        </div>
+        
+        <button type="submit" class="btn-login">Log In to Console <i class="fas fa-sign-in-alt"></i></button>
+      </form>
+      
+      <div class="login-info-box">
+        <i class="fas fa-info-circle"></i> <strong>Set up Admin Login:</strong> Go to the **Authentication** tab of your Supabase Cloud Dashboard, click **Add User**, and create an email/password account.
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. MAIN DASHBOARD -->
+  <div class="dashboard-container" id="dashboard-screen">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div>
+        <div class="sidebar-brand">
+          SHANKAR <span>TRAVELS</span>
+        </div>
+        <ul class="sidebar-menu">
+          <li class="menu-item active" data-tab="tab-analytics">
+            <i class="fas fa-chart-line"></i> Analytics Dashboard
+          </li>
+          <li class="menu-item" data-tab="tab-leads">
+            <i class="fas fa-inbox"></i> Consultation Leads
+          </li>
+          <li class="menu-item" data-tab="tab-cms">
+            <i class="fas fa-edit"></i> Website CMS
+          </li>
+        </ul>
+      </div>
+      
+      <div class="sidebar-footer">
+        <div class="user-info" id="admin-user-display">
+          Logged in as: admin
+        </div>
+        <button class="btn-logout" id="btn-logout">
+          <i class="fas fa-sign-out-alt"></i> Log Out
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="content-area">
+      <header class="header-bar">
+        <h2 class="page-title" id="page-title-display">Analytics Dashboard</h2>
+        <a href="index.html" target="_blank" class="btn btn-secondary btn-sm" style="display: flex; align-items: center; gap: 6px;">
+          <i class="fas fa-external-link-alt"></i> View Site
+        </a>
+      </header>
+
+      <main class="main-body">
+        
+        <!-- ================= TAB A: ANALYTICS ================= -->
+        <section class="tab-pane active" id="tab-analytics">
+          <!-- Stats Grid -->
+          <div class="stats-grid">
+            <div class="stat-card leads-card">
+              <div>
+                <div class="stat-label">Total Inquiries</div>
+                <div class="stat-number" id="stat-total-leads">0</div>
+              </div>
+              <i class="fas fa-inbox stat-icon"></i>
+            </div>
+            
+            <div class="stat-card pending-card">
+              <div>
+                <div class="stat-label">Pending Reviews</div>
+                <div class="stat-number" id="stat-pending-leads">0</div>
+              </div>
+              <i class="fas fa-clock stat-icon"></i>
+            </div>
+
+            <div class="stat-card contacted-card">
+              <div>
+                <div class="stat-label">Leads Processed</div>
+                <div class="stat-number" id="stat-processed-leads">0</div>
+              </div>
+              <i class="fas fa-check-circle stat-icon"></i>
+            </div>
+          </div>
+
+          <!-- Destinations & Conversion Charts -->
+          <div class="destinations-grid">
+            <div class="card-panel">
+              <h3 class="panel-title" style="margin-bottom: 20px;">Top Destination Searches</h3>
+              <div id="destinations-bars">
+                <!-- Dynamically loaded progress bars -->
+                <p style="color: var(--text-muted); font-size: 0.9rem;">No data available yet.</p>
+              </div>
+            </div>
+
+            <div class="card-panel">
+              <h3 class="panel-title" style="margin-bottom: 20px;">Accommodation Preferences</h3>
+              <div id="accommodations-bars">
+                <!-- Dynamically loaded progress bars -->
+                <p style="color: var(--text-muted); font-size: 0.9rem;">No data available yet.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= TAB B: LEADS MANAGER ================= -->
+        <section class="tab-pane" id="tab-leads">
+          <div class="card-panel">
+            <div class="panel-header">
+              <h3 class="panel-title">Client Consultation Requests</h3>
+              <div>
+                <select id="lead-filter-status" class="form-control" style="padding: 6px 12px; font-size: 0.85rem; width: auto; display: inline-block;">
+                  <option value="all">All Statuses</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Contacted">Contacted</option>
+                  <option value="Closed">Closed</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="table-container">
+              <table class="leads-table" id="leads-table-element">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Destination</th>
+                    <th>Guests</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="leads-table-body">
+                  <tr>
+                    <td colspan="7" class="text-center" style="padding: 30px; text-align: center; color: var(--text-muted);">
+                      <i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i> Loading client leads...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ================= TAB C: WEBSITE CMS ================= -->
+        <section class="tab-pane" id="tab-cms">
+          <div class="card-panel">
+            <h3 class="panel-title" style="margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 16px;">
+              Homepage Settings Editor
+            </h3>
+            
+            <div class="cms-grid">
+              <!-- CMS Settings Form -->
+              <form id="cms-editor-form">
+                <div class="form-group">
+                  <label class="form-label">Hero Badge Text</label>
+                  <input type="text" id="cms-hero-badge" class="form-control" placeholder="e.g. Bespoke Travel Solutions" required>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Hero Banner Title</label>
+                  <input type="text" id="cms-hero-title" class="form-control" placeholder="e.g. Elevating Your Journey" required>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Hero Banner Description</label>
+                  <textarea id="cms-hero-desc" class="form-control" rows="4" placeholder="Description of travel services..." required style="resize: vertical;"></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Hero Background Image URL</label>
+                  <input type="text" id="cms-hero-image" class="form-control" placeholder="assets/travel_hero.jpg" required>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">WhatsApp Contact Number</label>
+                  <input type="text" id="cms-whatsapp" class="form-control" placeholder="e.g. 919999999999" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="btn-save-cms" style="margin-top: 10px;">
+                  <i class="fas fa-save"></i> Save CMS Settings
+                </button>
+              </form>
+
+              <!-- Real-time Preview Pane -->
+              <div>
+                <div class="preview-box">
+                  <div class="preview-title"><i class="fas fa-eye"></i> Hero Layout Preview</div>
+                  <div style="background: rgba(11, 25, 44, 0.85); padding: 25px; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.1); width: 100%; color: white;">
+                    <span id="preview-badge-text" style="color: var(--accent); font-weight: 700; font-size: 0.7rem; text-transform: uppercase; border: 1px solid var(--accent); padding: 2px 8px; border-radius: 50px; display: inline-block; margin-bottom: 8px;">Badge</span>
+                    <h4 id="preview-title-text" style="font-size: 1.15rem; font-weight: 800; margin-bottom: 8px;">Title</h4>
+                    <p id="preview-desc-text" style="font-size: 0.75rem; color: rgba(255,255,255,0.7); max-width: 250px; margin: 0 auto; line-height: 1.4;">Description</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- 3. DETAIL MODAL -->
+  <div class="modal" id="lead-details-modal">
+    <div class="modal-content">
+      <header class="modal-header">
+        <h3 id="modal-client-name">Inquiry Details</h3>
+        <button class="close-btn" id="btn-close-modal"><i class="fas fa-times"></i></button>
+      </header>
+      <div class="modal-body">
+        <div class="grid-2">
+          <div class="lead-detail-item">
+            <div class="lead-detail-label">Client Name</div>
+            <div class="lead-detail-value" id="detail-name">-</div>
+          </div>
+          <div class="lead-detail-item">
+            <div class="lead-detail-label">Request Date</div>
+            <div class="lead-detail-value" id="detail-date">-</div>
+          </div>
+          <div class="lead-detail-item">
+            <div class="lead-detail-label">Email Address</div>
+            <div class="lead-detail-value" id="detail-email">-</div>
+          </div>
+          <div class="lead-detail-item">
+            <div class="lead-detail-label">Phone Number</div>
+            <div class="lead-detail-value" id="detail-phone">-</div>
+          </div>
+          <div class="lead-detail-item">
+            <div class="lead-detail-label">Destination</div>
+            <div class="lead-detail-value" id="detail-destination">-</div>
+          </div>
+          <div class="lead-detail-item">
+            <div class="lead-detail-label">Number of Guests</div>
+            <div class="lead-detail-value" id="detail-guests">-</div>
+          </div>
+          <div class="lead-detail-item">
+            <div class="lead-detail-label">Hotel Rating Preference</div>
+            <div class="lead-detail-value" id="detail-accommodation">-</div>
+          </div>
+        </div>
+
+        <div class="lead-detail-item" style="margin-top: 10px;">
+          <div class="lead-detail-label">Client Message / Activity Requests</div>
+          <div class="lead-detail-value" id="detail-message" style="background-color: var(--light); padding: 15px; border-radius: var(--radius-sm); border: 1px solid var(--border); font-size: 0.9rem; font-weight: 400; max-height: 120px; overflow-y: auto;">-</div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid var(--border); margin: 25px 0;">
+
+        <form id="lead-admin-update-form">
+          <input type="hidden" id="detail-lead-id">
+          
+          <div class="form-group">
+            <label class="form-label">Review Status</label>
+            <select id="detail-status" class="form-control" required>
+              <option value="Pending">Pending Review</option>
+              <option value="Contacted">Contacted / In Progress</option>
+              <option value="Closed">Closed / Completed</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Admin Follow-up Notes</label>
+            <textarea id="detail-notes" class="form-control" rows="3" placeholder="Type internal call logs, pricing quotes or progress notes here..."></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancel-modal">Cancel</button>
+        <button class="btn btn-primary" id="btn-save-modal"><i class="fas fa-check"></i> Save Lead Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. TOAST NOTIFICATION -->
+  <div class="toast toast-success" id="toast-notification">
+    <span id="toast-message">Task completed successfully!</span>
+  </div>
+
+  <!-- Javascript Core Logic -->
+  <script>
+    // Supabase Configuration
+    const SUPABASE_URL = 'https://ojwadbuxafaecumoqqpo.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9qd2FkYnV4YWZhZWN1bW9xcXBvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNTgzODgsImV4cCI6MjA5NzYzNDM4OH0.-zLp5bHzo3iVD8cXIAmcvjQBR8V2n84Ea__xbTwnPFk';
+    
+    let supabase = null;
+    let allLeads = [];
+
+    // Initialize Supabase Client
+    if (typeof window.supabase !== 'undefined' && SUPABASE_URL && SUPABASE_ANON_KEY) {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuthState();
+      initUIListeners();
+    });
+
+    // Check if logged in
+    function checkAuthState() {
+      if (!supabase) {
+        showToast('Supabase is not configured yet. Check connection variables.', 'error');
+        return;
+      }
+      
+      const user = supabase.auth.user ? supabase.auth.user() : supabase.auth.getSession().then(({data}) => {
+        if (data && data.session) {
+          showDashboard(data.session.user);
+        } else {
+          showLoginScreen();
+        }
+      });
+    }
+
+    // Toggle Screens
+    function showLoginScreen() {
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('dashboard-screen').style.display = 'none';
+    }
+
+    function showDashboard(user) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('dashboard-screen').style.display = 'grid';
+      document.getElementById('admin-user-display').innerText = `Logged in as: ${user.email}`;
+      
+      // Load Initial Stats & Leads
+      loadAllDashboardData();
+    }
+
+    // Load Data
+    async function loadAllDashboardData() {
+      if (!supabase) return;
+      
+      try {
+        // Fetch Leads
+        const { data: leads, error: leadsError } = await supabase
+          .from('travel_leads')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (leadsError) throw leadsError;
+        allLeads = leads;
+
+        // Render Panels
+        renderAnalytics(allLeads);
+        renderLeadsTable(allLeads);
+        
+        // Fetch CMS Settings
+        loadCMSSettings();
+
+      } catch (err) {
+        showToast('Failed to load dashboard data: ' + err.message, 'error');
+      }
+    }
+
+    // Load CMS Data
+    async function loadCMSSettings() {
+      try {
+        const { data: settings, error } = await supabase.from('site_settings').select('*');
+        if (error) throw error;
+
+        const cms = {};
+        settings.forEach(item => {
+          cms[item.key] = item.value;
+        });
+
+        // Prepopulate CMS forms
+        document.getElementById('cms-hero-badge').value = cms.hero_badge || '';
+        document.getElementById('cms-hero-title').value = cms.hero_title || '';
+        document.getElementById('cms-hero-desc').value = cms.hero_desc || '';
+        document.getElementById('cms-hero-image').value = cms.hero_image_url || '';
+        document.getElementById('cms-whatsapp').value = cms.whatsapp_number || '';
+
+        // Update real-time previews
+        updateCMSPreview();
+
+      } catch (err) {
+        console.error('Failed to load CMS settings:', err.message);
+      }
+    }
+
+    // Render Analytics
+    function renderAnalytics(leads) {
+      // Basic counts
+      const totalCount = leads.length;
+      const pendingCount = leads.filter(l => l.status === 'Pending' || !l.status).length;
+      const processedCount = leads.filter(l => l.status === 'Contacted' || l.status === 'Closed').length;
+
+      document.getElementById('stat-total-leads').innerText = totalCount;
+      document.getElementById('stat-pending-leads').innerText = pendingCount;
+      document.getElementById('stat-processed-leads').innerText = processedCount;
+
+      // Destination counts breakdown
+      const destinations = {};
+      const accommodations = {};
+
+      leads.forEach(l => {
+        if (l.destination) {
+          destinations[l.destination] = (destinations[l.destination] || 0) + 1;
+        }
+        if (l.accommodation) {
+          accommodations[l.accommodation] = (accommodations[l.accommodation] || 0) + 1;
+        }
+      });
+
+      // Render Destinations progress bars
+      const destBars = document.getElementById('destinations-bars');
+      destBars.innerHTML = '';
+      const sortedDest = Object.entries(destinations).sort((a,b) => b[1] - a[1]);
+
+      if (sortedDest.length === 0) {
+        destBars.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">No search queries found.</p>';
+      } else {
+        sortedDest.forEach(([dest, count]) => {
+          const pct = Math.round((count / totalCount) * 100);
+          destBars.innerHTML += `
+            <div class="progress-bar-container">
+              <div class="progress-bar-header">
+                <span><i class="fas fa-map-marker-alt" style="color: var(--accent); margin-right: 5px;"></i> ${dest}</span>
+                <strong>${count} lead(s) (${pct}%)</strong>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" style="width: ${pct}%;"></div>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      // Render Accommodations progress bars
+      const hotelBars = document.getElementById('accommodations-bars');
+      hotelBars.innerHTML = '';
+      const sortedHotel = Object.entries(accommodations).sort((a,b) => b[1] - a[1]);
+
+      if (sortedHotel.length === 0) {
+        hotelBars.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">No hotels data recorded.</p>';
+      } else {
+        sortedHotel.forEach(([rating, count]) => {
+          const pct = Math.round((count / totalCount) * 100);
+          hotelBars.innerHTML += `
+            <div class="progress-bar-container">
+              <div class="progress-bar-header">
+                <span><i class="fas fa-star" style="color: var(--warning); margin-right: 5px;"></i> ${rating}</span>
+                <strong>${count} booking(s) (${pct}%)</strong>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill" style="width: ${pct}%; background-color: var(--info);"></div>
+              </div>
+            </div>
+          `;
+        });
+      }
+    }
+
+    // Render Leads Table
+    function renderLeadsTable(leads) {
+      const tbody = document.getElementById('leads-table-body');
+      const filter = document.getElementById('lead-filter-status').value;
+      tbody.innerHTML = '';
+
+      let filteredLeads = leads;
+      if (filter !== 'all') {
+        filteredLeads = leads.filter(l => l.status === filter);
+      }
+
+      if (filteredLeads.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);">
+              <i class="fas fa-folder-open" style="font-size: 2rem; margin-bottom: 8px; display: block; opacity: 0.5;"></i> No client leads match your selection.
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      filteredLeads.forEach(lead => {
+        const dateStr = new Date(lead.created_at).toLocaleDateString('en-IN', {
+          day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+
+        const status = lead.status || 'Pending';
+        let badgeClass = 'badge-pending';
+        if (status === 'Contacted') badgeClass = 'badge-contacted';
+        if (status === 'Closed') badgeClass = 'badge-closed';
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${dateStr}</td>
+          <td><strong>${lead.name}</strong></td>
+          <td>${lead.email}</td>
+          <td>${lead.destination || '-'}</td>
+          <td>${lead.guests || '-'}</td>
+          <td><span class="badge ${badgeClass}">${status}</span></td>
+          <td>
+            <button class="btn btn-secondary btn-sm btn-view-lead" data-id="${lead.id}">
+              <i class="fas fa-eye"></i> Details
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      // Bind Details Action
+      document.querySelectorAll('.btn-view-lead').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const leadId = btn.dataset.id;
+          openLeadDetails(leadId);
+        });
+      });
+    }
+
+    // Open Lead Details Modal
+    function openLeadDetails(id) {
+      const lead = allLeads.find(l => l.id === id);
+      if (!lead) return;
+
+      document.getElementById('detail-lead-id').value = lead.id;
+      document.getElementById('detail-name').innerText = lead.name;
+      document.getElementById('detail-date').innerText = new Date(lead.created_at).toLocaleString();
+      document.getElementById('detail-email').innerText = lead.email;
+      document.getElementById('detail-phone').innerText = lead.phone || '-';
+      document.getElementById('detail-destination').innerText = lead.destination || '-';
+      document.getElementById('detail-guests').innerText = lead.guests || '-';
+      document.getElementById('detail-accommodation').innerText = lead.accommodation || '-';
+      document.getElementById('detail-message').innerText = lead.message || 'No additional comments provided.';
+      
+      document.getElementById('detail-status').value = lead.status || 'Pending';
+      document.getElementById('detail-notes').value = lead.admin_notes || '';
+
+      document.getElementById('lead-details-modal').style.display = 'flex';
+    }
+
+    // Real-time Preview Update
+    function updateCMSPreview() {
+      document.getElementById('preview-badge-text').innerText = document.getElementById('cms-hero-badge').value || 'Badge';
+      document.getElementById('preview-title-text').innerText = document.getElementById('cms-hero-title').value || 'Title';
+      document.getElementById('preview-desc-text').innerText = document.getElementById('cms-hero-desc').value || 'Description';
+    }
+
+    // UI Listeners
+    function initUIListeners() {
+      
+      // Email Login submission
+      document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+
+        try {
+          const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+          showToast('Login successful!', 'success');
+          showDashboard(data.user);
+        } catch (err) {
+          showToast(err.message, 'error');
+        }
+      });
+
+      // Logout
+      document.getElementById('btn-logout').addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        showToast('Logged out successfully.', 'success');
+        showLoginScreen();
+      });
+
+      // Sidebar Tab Switching
+      document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', () => {
+          // Toggle Menu active state
+          document.querySelectorAll('.menu-item').forEach(mi => mi.classList.remove('active'));
+          item.classList.add('active');
+
+          // Switch Tabs
+          const targetTab = item.dataset.tab;
+          document.querySelectorAll('.tab-pane').forEach(tp => tp.classList.remove('active'));
+          document.getElementById(targetTab).classList.add('active');
+
+          // Update header title
+          document.getElementById('page-title-display').innerText = item.innerText.trim();
+        });
+      });
+
+      // Table Status filter change
+      document.getElementById('lead-filter-status').addEventListener('change', () => {
+        renderLeadsTable(allLeads);
+      });
+
+      // Modal Close Elements
+      const closeModal = () => {
+        document.getElementById('lead-details-modal').style.display = 'none';
+      };
+      document.getElementById('btn-close-modal').addEventListener('click', closeModal);
+      document.getElementById('btn-cancel-modal').addEventListener('click', closeModal);
+
+      // Lead changes Save Submission
+      document.getElementById('btn-save-modal').addEventListener('click', async () => {
+        const id = document.getElementById('detail-lead-id').value;
+        const status = document.getElementById('detail-status').value;
+        const notes = document.getElementById('detail-notes').value;
+
+        try {
+          const { error } = await supabase
+            .from('travel_leads')
+            .update({ status: status, admin_notes: notes })
+            .eq('id', id);
+
+          if (error) throw error;
+          
+          showToast('Lead details updated successfully!', 'success');
+          closeModal();
+          loadAllDashboardData();
+
+        } catch (err) {
+          showToast('Save failed: ' + err.message, 'error');
+        }
+      });
+
+      // CMS editor form submit
+      document.getElementById('cms-editor-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const badge = document.getElementById('cms-hero-badge').value;
+        const title = document.getElementById('cms-hero-title').value;
+        const desc = document.getElementById('cms-hero-desc').value;
+        const img = document.getElementById('cms-hero-image').value;
+        const phone = document.getElementById('cms-whatsapp').value;
+
+        try {
+          const updates = [
+            { key: 'hero_badge', value: badge },
+            { key: 'hero_title', value: title },
+            { key: 'hero_desc', value: desc },
+            { key: 'hero_image_url', value: img },
+            { key: 'whatsapp_number', value: phone }
+          ];
+
+          for (const item of updates) {
+            const { error } = await supabase
+              .from('site_settings')
+              .upsert(item, { onConflict: 'key' });
+            if (error) throw error;
+          }
+
+          showToast('CMS settings updated successfully!', 'success');
+          loadAllDashboardData();
+
+        } catch (err) {
+          showToast('Failed to save settings: ' + err.message, 'error');
+        }
+      });
+
+      // CMS live preview text bindings
+      ['cms-hero-badge', 'cms-hero-title', 'cms-hero-desc'].forEach(id => {
+        document.getElementById(id).addEventListener('input', updateCMSPreview);
+      });
+    }
+
+    // Helper: Toast notifications
+    function showToast(msg, type = 'success') {
+      const toast = document.getElementById('toast-notification');
+      const messageSpan = document.getElementById('toast-message');
+      
+      messageSpan.innerText = msg;
+      toast.className = 'toast';
+      
+      if (type === 'success') toast.classList.add('toast-success');
+      if (type === 'error') toast.classList.add('toast-error');
+
+      toast.style.display = 'flex';
+
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3500);
+    }
+  </script>
+</body>
+</html>
