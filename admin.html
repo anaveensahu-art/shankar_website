@@ -1097,42 +1097,57 @@
     });
 
     // Check if logged in & auto-login unconditionally
-    function checkAuthState() {
-      if (!supabase) {
-        const statusEl = document.getElementById('loading-status');
+    async function checkAuthState() {
+      const statusEl = document.getElementById('loading-status');
+      
+      const logStatus = (msg, isError = false) => {
+        console.log("[Admin Auth]", msg);
         if (statusEl) {
-          statusEl.innerText = 'Database offline. Supabase library not loaded.';
-          statusEl.style.color = 'var(--danger)';
+          statusEl.innerText = msg;
+          if (isError) {
+            statusEl.style.color = 'var(--danger)';
+            const spinner = document.getElementById('loading-spinner');
+            if (spinner) spinner.style.display = 'none';
+          }
         }
+      };
+
+      logStatus('Initializing client authentication...');
+
+      if (!supabase) {
+        logStatus('Database offline. Supabase library not loaded.', true);
         return;
       }
       
-      supabase.auth.onAuthStateChange((event, session) => {
+      try {
+        logStatus('Checking active session...');
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError) throw sessionError;
+
         if (session) {
+          logStatus('Session found. Loading dashboard...');
           showDashboard(session.user);
-        } else {
-          // Attempt automatic login in background
-          const statusEl = document.getElementById('loading-status');
-          if (statusEl) statusEl.innerText = 'Authenticating admin session...';
-          
-          supabase.auth.signInWithPassword({
-            email: 'admin@shankartravels.com',
-            password: 'AdminPassword2026'
-          }).then(({ data, error }) => {
-            if (error) {
-              const statusEl = document.getElementById('loading-status');
-              const spinner = document.getElementById('loading-spinner');
-              if (statusEl) {
-                statusEl.innerText = 'Connection failed: ' + error.message;
-                statusEl.style.color = 'var(--danger)';
-              }
-              if (spinner) spinner.style.display = 'none';
-            } else if (data && data.user) {
-              showDashboard(data.user);
-            }
-          });
+          return;
         }
-      });
+
+        logStatus('Connecting to database...');
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: 'admin@shankartravels.com',
+          password: 'AdminPassword2026'
+        });
+
+        if (error) throw error;
+
+        if (data && data.user) {
+          logStatus('Login successful. Loading dashboard...');
+          showDashboard(data.user);
+        } else {
+          throw new Error('No user data returned from login.');
+        }
+
+      } catch (err) {
+        logStatus('Authentication failed: ' + err.message, true);
+      }
     }
 
     // Toggle Screens
