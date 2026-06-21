@@ -886,6 +886,17 @@
             <div class="cms-grid">
               <!-- CMS Settings Form -->
               <form id="cms-editor-form">
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label">Logo Primary Text</label>
+                    <input type="text" id="cms-logo-primary" class="form-control" placeholder="e.g. SHANKAR" required>
+                  </div>
+                  <div class="form-group" style="margin-bottom: 0;">
+                    <label class="form-label">Logo Secondary Text</label>
+                    <input type="text" id="cms-logo-secondary" class="form-control" placeholder="e.g. TRAVELS" required>
+                  </div>
+                </div>
+
                 <div class="form-group">
                   <label class="form-label">Hero Badge Text</label>
                   <input type="text" id="cms-hero-badge" class="form-control" placeholder="e.g. Bespoke Travel Solutions" required>
@@ -920,7 +931,11 @@
               <div>
                 <div class="preview-box">
                   <div class="preview-title"><i class="fas fa-eye"></i> Hero Layout Preview</div>
-                  <div style="background: rgba(11, 25, 44, 0.85); padding: 25px; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.1); width: 100%; color: white;">
+                  <div style="background: rgba(11, 25, 44, 0.85); padding: 25px; border-radius: var(--radius-sm); border: 1px solid rgba(255,255,255,0.1); width: 100%; color: white; position: relative;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 15px;">
+                      <div style="font-weight: 800; font-size: 0.75rem; letter-spacing: 0.5px;" id="preview-logo-text">SHANKAR <span style="color: var(--accent);">TRAVELS</span></div>
+                      <div style="font-size: 0.65rem; color: rgba(255,255,255,0.5);"><i class="fas fa-bars"></i></div>
+                    </div>
                     <span id="preview-badge-text" style="color: var(--accent); font-weight: 700; font-size: 0.7rem; text-transform: uppercase; border: 1px solid var(--accent); padding: 2px 8px; border-radius: 50px; display: inline-block; margin-bottom: 8px;">Badge</span>
                     <h4 id="preview-title-text" style="font-size: 1.15rem; font-weight: 800; margin-bottom: 8px;">Title</h4>
                     <p id="preview-desc-text" style="font-size: 0.75rem; color: rgba(255,255,255,0.7); max-width: 250px; margin: 0 auto; line-height: 1.4;">Description</p>
@@ -1103,6 +1118,8 @@
         });
 
         // Prepopulate CMS forms
+        document.getElementById('cms-logo-primary').value = cms.logo_primary || 'SHANKAR';
+        document.getElementById('cms-logo-secondary').value = cms.logo_secondary || 'TRAVELS';
         document.getElementById('cms-hero-badge').value = cms.hero_badge || '';
         document.getElementById('cms-hero-title').value = cms.hero_title || '';
         document.getElementById('cms-hero-desc').value = cms.hero_desc || '';
@@ -1271,6 +1288,13 @@
 
     // Real-time Preview Update
     function updateCMSPreview() {
+      const primary = document.getElementById('cms-logo-primary').value || 'SHANKAR';
+      const secondary = document.getElementById('cms-logo-secondary').value || 'TRAVELS';
+      const previewLogo = document.getElementById('preview-logo-text');
+      if (previewLogo) {
+        previewLogo.innerHTML = `${primary} <span style="color: var(--accent);">${secondary}</span>`;
+      }
+
       document.getElementById('preview-badge-text').innerText = document.getElementById('cms-hero-badge').value || 'Badge';
       document.getElementById('preview-title-text').innerText = document.getElementById('cms-hero-title').value || 'Title';
       document.getElementById('preview-desc-text').innerText = document.getElementById('cms-hero-desc').value || 'Description';
@@ -1364,6 +1388,8 @@
       document.getElementById('cms-editor-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         
+        const logoPrimary = document.getElementById('cms-logo-primary').value;
+        const logoSecondary = document.getElementById('cms-logo-secondary').value;
         const badge = document.getElementById('cms-hero-badge').value;
         const title = document.getElementById('cms-hero-title').value;
         const desc = document.getElementById('cms-hero-desc').value;
@@ -1372,6 +1398,8 @@
 
         try {
           const updates = [
+            { key: 'logo_primary', value: logoPrimary },
+            { key: 'logo_secondary', value: logoSecondary },
             { key: 'hero_badge', value: badge },
             { key: 'hero_title', value: title },
             { key: 'hero_desc', value: desc },
@@ -1395,7 +1423,7 @@
       });
 
       // CMS live preview text bindings
-      ['cms-hero-badge', 'cms-hero-title', 'cms-hero-desc'].forEach(id => {
+      ['cms-logo-primary', 'cms-logo-secondary', 'cms-hero-badge', 'cms-hero-title', 'cms-hero-desc'].forEach(id => {
         document.getElementById(id).addEventListener('input', updateCMSPreview);
       });
     }

@@ -41,6 +41,16 @@ async function loadDynamicContent() {
       globalWhatsAppNumber = settings.whatsapp_number.replace(/\D/g, '');
     }
 
+    // Update Logo text dynamically if settings exist
+    const siteLogos = document.querySelectorAll('.logo-text');
+    if (siteLogos.length > 0 && (settings.logo_primary || settings.logo_secondary)) {
+      const primary = settings.logo_primary || 'SHANKAR';
+      const secondary = settings.logo_secondary || 'TRAVELS';
+      siteLogos.forEach(logo => {
+        logo.innerHTML = `${primary} <span>${secondary}</span>`;
+      });
+    }
+
     // Update Hero elements dynamically if we are on landing page
     const heroTitle = document.querySelector('.hero-travel-agency .hero-title');
     const heroDesc = document.querySelector('.hero-travel-agency .hero-desc');
