@@ -1095,12 +1095,12 @@
     const SUPABASE_URL = 'https://ojwadbuxafaecumoqqpo.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9qd2FkYnV4YWZhZWN1bW9xcXBvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNTgzODgsImV4cCI6MjA5NzYzNDM4OH0.-zLp5bHzo3iVD8cXIAmcvjQBR8V2n84Ea__xbTwnPFk';
     
-    let supabase = null;
+    let supabaseClient = null;
     let allLeads = [];
 
     // Initialize Supabase Client
     if (typeof window.supabase !== 'undefined' && SUPABASE_URL && SUPABASE_ANON_KEY) {
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -1130,14 +1130,14 @@
 
       logStatus('Initializing client authentication...');
 
-      if (!supabase) {
+      if (!supabaseClient) {
         logStatus('Database offline. Supabase library not loaded.', true);
         return;
       }
       
       try {
         logStatus('Checking active session...');
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
         if (sessionError) throw sessionError;
 
         if (session) {
@@ -1147,7 +1147,7 @@
         }
 
         logStatus('Connecting to database...');
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
           email: 'admin@shankartravels.com',
           password: 'AdminPassword2026'
         });
@@ -1183,11 +1183,11 @@
 
     // Load Data
     async function loadAllDashboardData() {
-      if (!supabase) return;
+      if (!supabaseClient) return;
       
       try {
         // Fetch Leads
-        const { data: leads, error: leadsError } = await supabase
+        const { data: leads, error: leadsError } = await supabaseClient
           .from('travel_leads')
           .select('*')
           .order('created_at', { ascending: false });
@@ -1210,7 +1210,7 @@
     // Load CMS Data
     async function loadCMSSettings() {
       try {
-        const { data: settings, error } = await supabase.from('site_settings').select('*');
+        const { data: settings, error } = await supabaseClient.from('site_settings').select('*');
         if (error) throw error;
 
         const cms = {};
@@ -1407,7 +1407,7 @@
       // Email Login submission
       // Logout (Redirects to home page since login is automatic)
       document.getElementById('btn-logout').addEventListener('click', async () => {
-        await supabase.auth.signOut();
+        await supabaseClient.auth.signOut();
         window.location.href = 'index.html';
       });
 
@@ -1447,7 +1447,7 @@
         const notes = document.getElementById('detail-notes').value;
 
         try {
-          const { error } = await supabase
+          const { error } = await supabaseClient
             .from('travel_leads')
             .update({ status: status, admin_notes: notes })
             .eq('id', id);
@@ -1487,7 +1487,7 @@
           ];
 
           for (const item of updates) {
-            const { error } = await supabase
+            const { error } = await supabaseClient
               .from('site_settings')
               .upsert(item, { onConflict: 'key' });
             if (error) throw error;
