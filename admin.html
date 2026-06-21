@@ -719,6 +719,10 @@
         <h1 class="login-logo">SHANKAR <span>TRAVELS</span></h1>
         <p class="login-subtitle">Admin Management Console Login</p>
       </div>
+
+      <div id="supabase-warning-banner" style="display: none; margin-bottom: 20px; padding: 15px; background-color: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--danger); border-radius: var(--radius-sm); font-size: 0.85rem; color: var(--danger); font-weight: 600; line-height: 1.4;">
+        <i class="fas fa-exclamation-triangle"></i> Supabase Database Library failed to load. Please disable any privacy/ad-blockers or check your connection.
+      </div>
       
       <form id="login-form">
         <div class="form-group">
@@ -1022,6 +1026,10 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      if (typeof window.supabase === 'undefined') {
+        const banner = document.getElementById('supabase-warning-banner');
+        if (banner) banner.style.display = 'block';
+      }
       checkAuthState();
       initUIListeners();
     });
@@ -1274,6 +1282,12 @@
       // Email Login submission
       document.getElementById('login-form').addEventListener('submit', async (e) => {
         e.preventDefault();
+        
+        if (!supabase) {
+          alert("Database connection is offline. Supabase library is not loaded.");
+          return;
+        }
+
         const email = document.getElementById('login-email').value;
         const password = document.getElementById('login-password').value;
 
@@ -1282,6 +1296,7 @@
           if (error) throw error;
           showToast('Login successful!', 'success');
         } catch (err) {
+          alert('Login failed: ' + err.message);
           showToast(err.message, 'error');
         }
       });
