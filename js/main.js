@@ -2,6 +2,17 @@
  * Shankar Travel Agency - Main Interactive Script
  */
 
+// Supabase Configuration - Fill in your credentials from the Supabase dashboard
+const SUPABASE_URL = ''; // e.g. 'https://your-project-id.supabase.co'
+const SUPABASE_ANON_KEY = ''; // e.g. 'eyJhbGciOiJIUzI1Ni...'
+
+let supabaseClient = null;
+
+if (typeof window.supabase !== 'undefined' && SUPABASE_URL && SUPABASE_ANON_KEY) {
+  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
   initNavigation();
   initTestimonialCarousel();
@@ -219,6 +230,29 @@ function showFormSubmitSuccess(form, data) {
   data.timestamp = new Date().toISOString();
   leads.push(data);
   localStorage.setItem('sos_travel_leads', JSON.stringify(leads));
+
+  // Save to Supabase Cloud Database if configured
+  if (supabaseClient) {
+    supabaseClient.from('travel_leads').insert([
+      {
+        name: data.name,
+        email: data.email,
+        phone: data.phone || null,
+        destination: data.destination || null,
+        guests: data.guests ? parseInt(data.guests) : null,
+        accommodation: data.accommodation || null,
+        message: data.message || null
+      }
+    ]).then(({ error }) => {
+      if (error) {
+        console.error('Error saving lead to Supabase:', error.message);
+      } else {
+        console.log('Lead saved successfully to Supabase!');
+      }
+    }).catch(err => {
+      console.error('Supabase push error:', err);
+    });
+  }
 
   const originalHTML = form.innerHTML;
   
