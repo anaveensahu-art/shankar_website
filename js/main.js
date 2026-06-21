@@ -3,8 +3,8 @@
  */
 
 // Supabase Configuration - Fill in your credentials from the Supabase dashboard
-const SUPABASE_URL = ''; // e.g. 'https://your-project-id.supabase.co'
-const SUPABASE_ANON_KEY = ''; // e.g. 'eyJhbGciOiJIUzI1Ni...'
+const SUPABASE_URL = 'https://ojwadbuxafaecumoqqpo.supabase.co'; // e.g. 'https://your-project-id.supabase.co'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9qd2FkYnV4YWZhZWN1bW9xcXBvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwNTgzODgsImV4cCI6MjA5NzYzNDM4OH0.-zLp5bHzo3iVD8cXIAmcvjQBR8V2n84Ea__xbTwnPFk'; // e.g. 'eyJhbGciOiJIUzI1Ni...'
 
 let supabaseClient = null;
 
