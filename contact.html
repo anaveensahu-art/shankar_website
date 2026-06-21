@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | Shankar Travel Agency</title>
+  <meta name="description" content="Get in touch with Shankar Travel Agency for custom vacation bookings or corporate retreat logistics. Noida office address, WhatsApp chat, and hotlines.">
+  
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-header-theme="light">
+
+  <!-- Global Header -->
+  <header class="site-header scrolled-light" id="site-header">
+    <div class="container header-container">
+      <a href="index.html" class="logo">
+        <span class="logo-text">SHANKAR <span>TRAVELS</span></span>
+      </a>
+      
+      <nav class="nav-menu" id="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="portfolio.html" class="nav-link">Tour Gallery</a>
+        <a href="about.html" class="nav-link">About Us</a>
+        <a href="contact.html" class="nav-link active">Contact</a>
+        <a href="contact.html" class="btn btn-travel" style="padding: 10px 20px; font-size: 0.85rem; margin-left: 10px;">Free Consultation</a>
+      </nav>
+      
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Contact Header Section -->
+    <section class="contact-header-section">
+      <div class="container">
+        <span class="hero-badge" style="color: var(--primary-navy); border-color: var(--primary-navy);">Get In Touch</span>
+        <h1>Connect With Our Planners</h1>
+        <p class="section-subtitle" style="margin-bottom: 0;">Ready to map out your next holiday or corporate seminar retreat? Send us a request details below.</p>
+      </div>
+    </section>
+
+    <!-- Main Contact Layout -->
+    <section class="section-padding container">
+      <div class="contact-layout-grid">
+        <!-- Left Column: Contact info and map -->
+        <div class="contact-info-panel">
+          <div class="contact-details-box">
+            <h3 style="font-size: 1.4rem; color: var(--primary-navy); margin-bottom: 8px;">Travel Agency Head Office</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;">Our coordinators are ready to consult on custom vacation itineraries and corporate event bookings.</p>
+            
+            <!-- Address -->
+            <div class="contact-info-item">
+              <div class="contact-info-icon"><i class="fas fa-location-dot"></i></div>
+              <div>
+                <h4 class="contact-info-heading">Physical Address</h4>
+                <p class="contact-info-text">Shankar Plaza, 3rd Floor, Sector 62,<br>Noida, Uttar Pradesh, 201301, India</p>
+              </div>
+            </div>
+            
+            <!-- Email -->
+            <div class="contact-info-item">
+              <div class="contact-info-icon"><i class="fas fa-envelope"></i></div>
+              <div>
+                <h4 class="contact-info-heading">Inquiry Email</h4>
+                <p class="contact-info-text">travel@shankaronline.com<br>support@shankaronline.com</p>
+              </div>
+            </div>
+            
+            <!-- Phone -->
+            <div class="contact-info-item">
+              <div class="contact-info-icon"><i class="fas fa-phone-volume"></i></div>
+              <div>
+                <h4 class="contact-info-heading">Booking Hotlines</h4>
+                <p class="contact-info-text">Corporate Booking: +91 120 4455 660<br>24/7 Travel Support: +91 99999 99999</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Sleek Map Area Placeholder -->
+          <div class="contact-map-wrapper" id="map">
+            <div class="map-placeholder">
+              <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="background-color: #f1f3f5;">
+                <defs>
+                  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(0,0,0,0.04)" stroke-width="1"/>
+                  </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+                <path d="M0 100 L400 100 M200 0 L200 400 M0 280 L400 220" stroke="rgba(0,0,0,0.08)" stroke-width="14" fill="none" />
+                <path d="M120 0 L320 400" stroke="rgba(0,0,0,0.06)" stroke-width="8" fill="none" />
+                <circle cx="200" cy="100" r="10" fill="var(--accent-travel)" opacity="0.3" />
+                <circle cx="200" cy="100" r="6" fill="var(--primary-navy)" />
+              </svg>
+              <div class="map-overlay-card">
+                <h4 class="map-overlay-title"><i class="fas fa-plane" style="color: var(--accent-travel);"></i> Shankar Travels</h4>
+                <p class="map-overlay-address">Sector 62, Noida, India</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Right Column: Interactive Consultation Lead Form -->
+        <div>
+          <form class="contact-form" id="sos-contact-form" novalidate>
+            <h3 style="font-size: 1.4rem; color: var(--primary-navy); margin-bottom: 8px;">Request a Travel Proposal</h3>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 30px;">Fill out your desired destination details, and a planner will draft an itinerary.</p>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="client-name" class="form-label">Full Name</label>
+                <input type="text" id="client-name" name="client-name" class="form-input" placeholder="e.g. Amit Patel" required autocomplete="name">
+              </div>
+              <div class="form-group">
+                <label for="client-email" class="form-label">Email Address</label>
+                <input type="email" id="client-email" name="client-email" class="form-input" placeholder="e.g. amit@example.com" required autocomplete="email">
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="client-phone" class="form-label">Phone Number</label>
+                <input type="tel" id="client-phone" name="client-phone" class="form-input" placeholder="e.g. +91 98765 43210" required autocomplete="tel">
+              </div>
+              <div class="form-group">
+                <label for="travel-destination" class="form-label">Preferred Destination</label>
+                <input type="text" id="travel-destination" name="travel-destination" class="form-input" placeholder="e.g. Switzerland, Maldives" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="travel-pax" class="form-label">Guests Count</label>
+                <input type="number" id="travel-pax" name="travel-pax" class="form-input" placeholder="e.g. 2" min="1" required>
+              </div>
+              <div class="form-group">
+                <label for="tour-class" class="form-label">Accommodation Class</label>
+                <select id="tour-class" name="tour-class" class="form-select" required>
+                  <option value="" disabled selected>-- Select Class --</option>
+                  <option value="luxury">5-Star Luxury Resort</option>
+                  <option value="premium">4-Star Premium Hotel</option>
+                  <option value="corporate">Corporate Seminar Venue</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="client-message" class="form-label">Expectations / Approximate Dates</label>
+              <textarea id="client-message" name="client-message" class="form-textarea" placeholder="Tell us more about your travel dates, specific sights you want to see, or conference requirements..." required></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-travel" style="width: 100%;"><i class="fas fa-paper-plane"></i> Submit Request</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trusted Partners Banner -->
+    <section class="trusted-banner text-center" style="border-bottom: none;">
+      <div class="container">
+        <h3 class="trusted-title">Our Corporate Booking Partners</h3>
+        <div class="trusted-logos">
+          <div class="trusted-logo"><img src="https://d2tdzhum1kggza.cloudfront.net/website/aparna-logo.svg" alt="Aparna Constructions Logo"></div>
+          <div class="trusted-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d6/BSF_Insignia.svg" alt="Border Security Force Logo" style="height: 42px; margin-right: 5px;"> Border Security Force (BSF)</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-info">
+        <a href="index.html" class="logo">
+          <span class="logo-text">SHANKAR <span>TRAVELS</span></span>
+        </a>
+        <p class="footer-text">Premium travel agency coordinating luxury custom vacation tour packages and B2B corporate group retreats worldwide.</p>
+        <div class="social-links">
+          <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+          <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      
+      <div>
+        <h4 class="footer-heading">Holiday Tours</h4>
+        <div class="footer-links">
+          <a href="index.html#packages-section">Maldives Luxury Stay</a>
+          <a href="index.html#packages-section">Swiss Alpine Rail</a>
+          <a href="index.html#packages-section">Bali Group Retreat</a>
+          <a href="portfolio.html">Past Tour Gallery</a>
+        </div>
+      </div>
+      
+      <div>
+        <h4 class="footer-heading">Quick Links</h4>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About Agency</a>
+          <a href="portfolio.html">Tours Portfolio</a>
+          <a href="contact.html">Contact Us</a>
+        </div>
+      </div>
+      
+      <div>
+        <h4 class="footer-heading">Deals Newsletter</h4>
+        <p class="footer-text" style="margin-bottom: 16px;">Sign up to get exclusive travel vouchers and curated deals.</p>
+        <div class="footer-newsletter">
+          <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed to Newsletter!'); this.reset();">
+            <input type="email" placeholder="Enter your email" class="newsletter-input" required aria-label="Email Address">
+            <button type="submit" class="newsletter-btn" aria-label="Subscribe"><i class="fas fa-paper-plane"></i></button>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container footer-bottom">
+      <div class="footer-copy">
+        &copy; 2026 Shankar Travel Agency. All Rights Reserved.
+      </div>
+      <div class="footer-legal-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp Widget -->
+  <div class="whatsapp-widget" id="whatsapp-widget">
+    <div class="whatsapp-tooltip">Chat with a consultant</div>
+    <div class="whatsapp-bubble" aria-label="Chat on WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </div>
+  </div>
+
+  <!-- Main JavaScript -->
+  <script src="js/main.js"></script>
+</body>
+</html>

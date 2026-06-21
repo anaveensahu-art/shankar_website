@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shankar Travel Agency | Custom Tours & Corporate Travel</title>
+  <meta name="description" content="Explore custom domestic and international tours, flight and hotel bookings, and B2B corporate retreats managed by Shankar Travel Agency.">
+  
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-header-theme="dark">
+
+  <!-- Global Header -->
+  <header class="site-header" id="site-header">
+    <div class="container header-container">
+      <a href="index.html" class="logo">
+        <span class="logo-text">SHANKAR <span>TRAVELS</span></span>
+      </a>
+      
+      <nav class="nav-menu" id="nav-menu">
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="portfolio.html" class="nav-link">Tour Gallery</a>
+        <a href="about.html" class="nav-link">About Us</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="contact.html" class="btn btn-travel" style="padding: 10px 20px; font-size: 0.85rem; margin-left: 10px;">Free Consultation</a>
+      </nav>
+      
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Single Premium Travel Hero -->
+    <section class="hero-travel-agency">
+      <div class="hero-travel-content">
+        <span class="hero-badge">Bespoke Travel Solutions</span>
+        <h1 class="hero-title">Elevating Your Journey</h1>
+        <p class="hero-desc">From premium corporate retreat coordination and business flights to curated luxury holiday packages, we handle every detail of your itinerary.</p>
+        <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+          <a href="#consultation-section" class="btn btn-travel">Book a Free Consultation <i class="fas fa-calendar-check"></i></a>
+          <a href="#packages-section" class="btn btn-outline-light">Explore Tour Packages <i class="fas fa-plane"></i></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Booking Engine Widget UI -->
+    <section class="container" style="position: relative;">
+      <div class="booking-widget-container">
+        <div class="booking-tabs">
+          <div class="booking-tab active" data-target-tab="flights-pane"><i class="fas fa-plane"></i> Search Flights</div>
+          <div class="booking-tab" data-target-tab="hotels-pane"><i class="fas fa-hotel"></i> Search Hotels</div>
+          <div class="booking-tab" data-target-tab="packages-pane"><i class="fas fa-suitcase"></i> Holiday Packages</div>
+        </div>
+        
+        <div class="booking-panes">
+          <!-- Pane 1: Flights -->
+          <div class="booking-pane active" id="flights-pane">
+            <form onsubmit="event.preventDefault(); alert('Searching for flights... Our consultant will call you with flight options!');" class="booking-form-row">
+              <div class="form-group">
+                <label class="form-label" style="font-size: 0.75rem;">From (City/Airport)</label>
+                <input type="text" placeholder="e.g. New Delhi (DEL)" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" style="font-size: 0.75rem;">To (City/Airport)</label>
+                <input type="text" placeholder="e.g. London Heathrow (LHR)" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" style="font-size: 0.75rem;">Departure Date</label>
+                <input type="date" class="form-input" required>
+              </div>
+              <button type="submit" class="btn btn-travel" style="width: 100%; height: 50px;"><i class="fas fa-search"></i> Find Flights</button>
+            </form>
+          </div>
+          
+          <!-- Pane 2: Hotels -->
+          <div class="booking-pane" id="hotels-pane">
+            <form onsubmit="event.preventDefault(); alert('Searching for premium hotels matching your inputs...');" class="booking-form-row">
+              <div class="form-group">
+                <label class="form-label" style="font-size: 0.75rem;">Destination City / Hotel</label>
+                <input type="text" placeholder="e.g. Male, Maldives" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" style="font-size: 0.75rem;">Check-in Date</label>
+                <input type="date" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" style="font-size: 0.75rem;">Check-out Date</label>
+                <input type="date" class="form-input" required>
+              </div>
+              <button type="submit" class="btn btn-travel" style="width: 100%; height: 50px;"><i class="fas fa-search"></i> Find Hotels</button>
+            </form>
+          </div>
+          
+          <!-- Pane 3: Packages -->
+          <div class="booking-pane" id="packages-pane">
+            <form onsubmit="event.preventDefault(); alert('Custom tour options matching your budget will be sent to your email!');" class="booking-form-row-three">
+              <div class="form-group">
+                <label class="form-label" style="font-size: 0.75rem;">Holiday Destination</label>
+                <input type="text" placeholder="e.g. Switzerland Alps Tour" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" style="font-size: 0.75rem;">Duration</label>
+                <select class="form-select" required>
+                  <option value="" disabled selected>-- Select Duration --</option>
+                  <option value="3-5">3 - 5 Nights</option>
+                  <option value="5-8">5 - 8 Nights</option>
+                  <option value="8+">8+ Nights</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-travel" style="width: 100%; height: 50px;"><i class="fas fa-paper-plane"></i> Send Package Request</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tour Packages Section -->
+    <section class="section-padding container" style="padding-top: 20px;" id="packages-section">
+      <div class="text-center">
+        <h2 class="section-title">Popular Curated Holidays</h2>
+        <p class="section-subtitle">Hand-picked luxurious travel packages featuring highly-rated stays, local transfers, and expert guided excursions.</p>
+      </div>
+      
+      <div class="packages-grid">
+        <!-- Tour Package 1 -->
+        <article class="package-card">
+          <div class="package-img-box">
+            <span class="package-tag">Luxurious Escape</span>
+            <img src="https://images.unsplash.com/photo-1573843981267-be1999ff37cd?auto=format&fit=crop&w=600&q=80" alt="Beautiful tropical overwater villas in Maldives">
+          </div>
+          <div class="package-info">
+            <div class="package-meta">
+              <span><i class="far fa-clock"></i> 5 Nights / 6 Days</span>
+              <span><i class="far fa-star"></i> 5.0 (42 reviews)</span>
+            </div>
+            <h3 class="package-title">Maldives Overwater Sanctuary</h3>
+            <p class="package-description">Indulge in pure luxury with private pool overwater villas, all-inclusive gourmet dining, airport speedboat transfers, and a sunset dolphin cruise excursion.</p>
+            <div class="package-footer">
+              <div class="package-price">
+                <span class="label">Starting From</span>
+                <span class="value">$1,850 <span>/ person</span></span>
+              </div>
+              <form class="package-inquiry-form">
+                <button type="submit" class="btn btn-travel" style="padding: 10px 18px; font-size: 0.85rem;">Inquire Now</button>
+              </form>
+            </div>
+          </div>
+        </article>
+        
+        <!-- Tour Package 2 -->
+        <article class="package-card">
+          <div class="package-img-box">
+            <span class="package-tag">European Wonders</span>
+            <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=600&q=80" alt="Eiffel Tower, Paris">
+          </div>
+          <div class="package-info">
+            <div class="package-meta">
+              <span><i class="far fa-clock"></i> 8 Nights / 9 Days</span>
+              <span><i class="far fa-star"></i> 4.9 (85 reviews)</span>
+            </div>
+            <h3 class="package-title">Grand Alpine & Paris Odyssey</h3>
+            <p class="package-description">Explore the iconic city of Paris before journeying to the spectacular Swiss Alps. Package covers high-speed rail passes, guided museum tickets, and mountain resort stays.</p>
+            <div class="package-footer">
+              <div class="package-price">
+                <span class="label">Starting From</span>
+                <span class="value">$2,490 <span>/ person</span></span>
+              </div>
+              <form class="package-inquiry-form">
+                <button type="submit" class="btn btn-travel" style="padding: 10px 18px; font-size: 0.85rem;">Inquire Now</button>
+              </form>
+            </div>
+          </div>
+        </article>
+        
+        <!-- Tour Package 3 -->
+        <article class="package-card">
+          <div class="package-img-box">
+            <span class="package-tag">Corporate Retreat</span>
+            <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80" alt="Auditorium conference meeting setup">
+          </div>
+          <div class="package-info">
+            <div class="package-meta">
+              <span><i class="far fa-clock"></i> Custom Duration</span>
+              <span><i class="far fa-star"></i> 4.8 (12 partners)</span>
+            </div>
+            <h3 class="package-title">Enterprise Retreat & Seminar</h3>
+            <p class="package-description">Elevate your team's synergy with seamless group flights, private villas in Ubud, conference venue setup, team-building sports, and tailored local catering services.</p>
+            <div class="package-footer">
+              <div class="package-price">
+                <span class="label">Starting From</span>
+                <span class="value">$1,100 <span>/ person</span></span>
+              </div>
+              <form class="package-inquiry-form">
+                <button type="submit" class="btn btn-travel" style="padding: 10px 18px; font-size: 0.85rem;">Inquire Now</button>
+              </form>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="section-padding" style="background-color: var(--slate-light);">
+      <div class="container">
+        <div class="text-center">
+          <h2 class="section-title">Why Travel With Shankar?</h2>
+          <p class="section-subtitle">We manage your itinerary down to the smallest detail to ensure safety, comfort, and premium experiences.</p>
+        </div>
+        
+        <div class="features-grid">
+          <div class="feature-box">
+            <div class="feature-icon-wrapper">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h4 class="feature-title">Fully Insured & Safe</h4>
+            <p class="feature-desc">Every flight and resort stay we book comes with travel insurance coverage and round-the-clock safety checks.</p>
+          </div>
+          
+          <div class="feature-box">
+            <div class="feature-icon-wrapper">
+              <i class="fas fa-headset"></i>
+            </div>
+            <h4 class="feature-title">24/7 Support Desk</h4>
+            <p class="feature-desc">Need to reschedule a flight or change your hotel room? Our support specialists are available on call at any hour.</p>
+          </div>
+          
+          <div class="feature-box">
+            <div class="feature-icon-wrapper">
+              <i class="fas fa-award"></i>
+            </div>
+            <h4 class="feature-title">Elite Partners Only</h4>
+            <p class="feature-desc">We work directly with Five-Star luxury hotel chains and major airlines to secure special booking rates.</p>
+          </div>
+          
+          <div class="feature-box">
+            <div class="feature-icon-wrapper">
+              <i class="fas fa-percentage"></i>
+            </div>
+            <h4 class="feature-title">Corporate Rates</h4>
+            <p class="feature-desc">Special reduced rates for corporate partners booking business trips and team retreats through our portal.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trusted By Corporate Partners -->
+    <section class="trusted-banner text-center">
+      <div class="container">
+        <h3 class="trusted-title">Our Corporate Booking Partners</h3>
+        <div class="trusted-logos">
+          <div class="trusted-logo"><img src="https://d2tdzhum1kggza.cloudfront.net/website/aparna-logo.svg" alt="Aparna Constructions Logo"></div>
+          <div class="trusted-logo"><img src="https://upload.wikimedia.org/wikipedia/commons/d/d6/BSF_Insignia.svg" alt="Border Security Force Logo" style="height: 42px; margin-right: 5px;"> Border Security Force (BSF)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section-padding testimonials-section">
+      <div class="container">
+        <div class="text-center" style="margin-bottom: 50px;">
+          <h2 class="section-title">What Our Travelers Say</h2>
+          <p class="section-subtitle" style="color: var(--slate-gray);">Hear from our business partners and holiday travelers about their journeys with us.</p>
+        </div>
+        
+        <div class="carousel-container">
+          <button class="carousel-nav-btn prev" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
+          
+          <div class="testimonials-scroller">
+            <!-- Testimonial 1 -->
+            <div class="testimonial-slide travel">
+              <i class="fas fa-quote-left quote-icon travel"></i>
+              <blockquote class="testimonial-text">"Our annual corporate retreat in Bali was entirely managed by Shankar Online Services. They arranged flights, luxury hotel bookings, team-building excursions, and dinners flawlessly. Every team member had a smooth experience. Absolutely highly recommended!"</blockquote>
+              <div class="testimonial-user">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&h=150&q=80" alt="Samantha Miller - Director of HR at Grand Majestic" class="user-img">
+                <div class="user-name">Samantha Miller</div>
+                <div class="user-company">Director of HR, Grand Majestic</div>
+              </div>
+            </div>
+            
+            <!-- Testimonial 2 -->
+            <div class="testimonial-slide travel">
+              <i class="fas fa-quote-left quote-icon travel"></i>
+              <blockquote class="testimonial-text">"The Maldives overwater villa booking was absolute heaven. Everything was pre-arranged: from the lounge tickets to the speedboats. We didn't have to worry about a single detail. Incredible service!"</blockquote>
+              <div class="testimonial-user">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&h=150&q=80" alt="Rahul Sharma - Premium Traveler" class="user-img">
+                <div class="user-name">Rahul Sharma</div>
+                <div class="user-company">Business Executive</div>
+              </div>
+            </div>
+          </div>
+          
+          <button class="carousel-nav-btn next" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
+          
+          <div class="carousel-dots"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Brief About Summary -->
+    <section class="section-padding container">
+      <div class="about-split">
+        <div>
+          <span class="hero-badge" style="color: var(--primary-navy); border-color: var(--slate-dark);">About Our Agency</span>
+          <h2 class="section-title" style="margin-top: 10px;">Making Travel Operations Effortless</h2>
+          <p style="margin-bottom: 24px; color: var(--text-muted); font-size: 1.05rem;">Founded on the principles of trust and logistical accuracy, <strong>Shankar Travel Agency</strong> operates as an elite tour coordination hub.</p>
+          <p style="margin-bottom: 30px; color: var(--text-muted);">Whether you are a corporate manager needing group flights and itineraries for regional retreats, or a family seeking a luxury private vacation packages, our experienced planners deliver smooth, premium outcomes.</p>
+          <a href="about.html" class="btn btn-outline-dark">Read Our Full Story</a>
+        </div>
+        <div class="about-graphics-box">
+          <img src="assets/travel_service.jpg" alt="Tourists looking at hot air balloon festival">
+        </div>
+      </div>
+    </section>
+
+    <!-- Consultation Request Form -->
+    <section class="section-padding" style="background-color: var(--slate-light);" id="consultation-section">
+      <div class="container" style="max-width: 800px;">
+        <div class="text-center" style="margin-bottom: 40px;">
+          <h2 class="section-title">Request Travel Consultation</h2>
+          <p class="section-subtitle" style="margin-bottom: 0;">Specify your destination plans and preferences, and our travel specialists will contact you to draft an itinerary.</p>
+        </div>
+        
+        <form class="contact-form" id="sos-contact-form" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="client-name" class="form-label">Full Name</label>
+              <input type="text" id="client-name" name="client-name" class="form-input" placeholder="e.g. Amit Patel" required autocomplete="name">
+            </div>
+            <div class="form-group">
+              <label for="client-email" class="form-label">Email Address</label>
+              <input type="email" id="client-email" name="client-email" class="form-input" placeholder="e.g. amit@example.com" required autocomplete="email">
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="client-phone" class="form-label">Phone Number</label>
+              <input type="tel" id="client-phone" name="client-phone" class="form-input" placeholder="e.g. +91 98765 43210" required autocomplete="tel">
+            </div>
+            <div class="form-group">
+              <label for="travel-destination" class="form-label">Preferred Destination</label>
+              <input type="text" id="travel-destination" name="travel-destination" class="form-input" placeholder="e.g. Switzerland, Maldives" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="travel-pax" class="form-label">Number of Guests</label>
+              <input type="number" id="travel-pax" name="travel-pax" class="form-input" placeholder="e.g. 2" min="1" required>
+            </div>
+            <div class="form-group">
+              <label for="tour-class" class="form-label">Accommodation Class</label>
+              <select id="tour-class" name="tour-class" class="form-select" required>
+                <option value="" disabled selected>-- Select Class --</option>
+                <option value="luxury">5-Star Luxury Resort</option>
+                <option value="premium">4-Star Premium Hotel</option>
+                <option value="corporate">Corporate Group Seminar Venue</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="client-message" class="form-label">Expected Tour Activities / Dates</label>
+            <textarea id="client-message" name="client-message" class="form-textarea" placeholder="Tell us more about your ideal dates, activities, and budget guidelines..." required></textarea>
+          </div>
+          
+          <button type="submit" class="btn btn-travel" style="width: 100%;"><i class="fas fa-paper-plane"></i> Submit Inquiry</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-info">
+        <a href="index.html" class="logo">
+          <span class="logo-text">SHANKAR <span>TRAVELS</span></span>
+        </a>
+        <p class="footer-text">Premium travel agency coordinating luxury custom vacation tour packages and B2B corporate group retreats worldwide.</p>
+        <div class="social-links">
+          <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+          <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      
+      <div>
+        <h4 class="footer-heading">Holiday Tours</h4>
+        <div class="footer-links">
+          <a href="index.html#packages-section">Maldives Luxury Stay</a>
+          <a href="index.html#packages-section">Swiss Alpine Rail</a>
+          <a href="index.html#packages-section">Bali Group Retreat</a>
+          <a href="portfolio.html">Past Tour Gallery</a>
+        </div>
+      </div>
+      
+      <div>
+        <h4 class="footer-heading">Quick Links</h4>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About Agency</a>
+          <a href="portfolio.html">Tours Portfolio</a>
+          <a href="contact.html">Contact Us</a>
+        </div>
+      </div>
+      
+      <div>
+        <h4 class="footer-heading">Deals Newsletter</h4>
+        <p class="footer-text" style="margin-bottom: 16px;">Sign up to get exclusive travel vouchers and curated deals.</p>
+        <div class="footer-newsletter">
+          <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed to Newsletter!'); this.reset();">
+            <input type="email" placeholder="Enter your email" class="newsletter-input" required aria-label="Email Address">
+            <button type="submit" class="newsletter-btn" aria-label="Subscribe"><i class="fas fa-paper-plane"></i></button>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container footer-bottom">
+      <div class="footer-copy">
+        &copy; 2026 Shankar Travel Agency. All Rights Reserved.
+      </div>
+      <div class="footer-legal-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp Widget -->
+  <div class="whatsapp-widget" id="whatsapp-widget">
+    <div class="whatsapp-tooltip">Chat with a consultant</div>
+    <div class="whatsapp-bubble" aria-label="Chat on WhatsApp">
+      <i class="fab fa-whatsapp"></i>
+    </div>
+  </div>
+
+  <!-- Main JavaScript -->
+  <script src="js/main.js"></script>
+</body>
+</html>
