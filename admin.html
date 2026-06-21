@@ -1033,9 +1033,9 @@
         return;
       }
       
-      const user = supabase.auth.user ? supabase.auth.user() : supabase.auth.getSession().then(({data}) => {
-        if (data && data.session) {
-          showDashboard(data.session.user);
+      supabase.auth.onAuthStateChange((event, session) => {
+        if (session) {
+          showDashboard(session.user);
         } else {
           showLoginScreen();
         }
@@ -1278,10 +1278,9 @@
         const password = document.getElementById('login-password').value;
 
         try {
-          const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+          const { error } = await supabase.auth.signInWithPassword({ email, password });
           if (error) throw error;
           showToast('Login successful!', 'success');
-          showDashboard(data.user);
         } catch (err) {
           showToast(err.message, 'error');
         }
